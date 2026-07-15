@@ -93,10 +93,13 @@ const QuantumWidget: React.FC<QuantumWidgetProps> = ({ quantumData }) => {
                   Harvest Now, Decrypt Later (HNDL)
                 </p>
                 <p className="text-[10px] text-muted mt-1 leading-relaxed">
-                  Adversaries capture encrypted banking data today — high-value transfers,
-                  HVT accounts, multi-device sessions — storing it to decrypt once quantum
-                  computers can break RSA/ECC. Risk is scored on transaction amount,
-                  account value, device diversity, and geo-dispersion.
+                  Adversaries intercept RSA/ECC-encrypted banking traffic today and store
+                  it, waiting until quantum computers can break the encryption. Risk is
+                  scored on: <span className="text-text/70">transaction value</span>,{' '}
+                  <span className="text-text/70">account balance (HVT classification)</span>,{' '}
+                  <span className="text-text/70">multi-device session channels</span>,{' '}
+                  <span className="text-text/70">external network routing (NEFT/RTGS)</span>,
+                  and <span className="text-text/70">historical encrypted data corpus size</span>.
                 </p>
               </div>
             </div>
