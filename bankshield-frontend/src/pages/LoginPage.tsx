@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { Shield, User, Lock, AlertCircle, Loader2, Eye, EyeOff, MapPin } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { getGeoDataFromIP } from '../utils/geolocation'
+import { getGeoDataFromIP, parseUserAgent } from '../utils/geolocation'
 
 // ── Tab type ──────────────────────────────────────────────────────────────────
 type TabRole = 'user' | 'admin'
@@ -77,12 +77,13 @@ const LoginPage: React.FC = () => {
     try {
       // Fetch location and IP before logging in
       const geoData = await getGeoDataFromIP()
+      const friendlyDevice = parseUserAgent(navigator.userAgent)
       const res = await login({
-        username:  username.trim(),
-        password:  password.trim(),
-        device:    navigator.userAgent,
-        browser:   navigator.userAgent,
-        location:  geoData.location,
+        username:   username.trim(),
+        password:   password.trim(),
+        device:     friendlyDevice,
+        browser:    friendlyDevice,
+        location:   geoData.location,
         ip_address: geoData.ip,
       })
       if (res.role === 'ADMIN') {

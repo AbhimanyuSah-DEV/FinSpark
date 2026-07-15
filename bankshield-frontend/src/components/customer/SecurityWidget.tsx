@@ -1,37 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Shield, Monitor, MapPin, CheckCircle2, ChevronRight, Clock, Wifi } from 'lucide-react'
-import { getLoginHistory } from '../../api/user.api'
-import type { LoginHistory } from '../../types'
+import { getGeoDataFromIP, parseUserAgent } from '../../utils/geolocation'
 
 const SECURITY_SCORE = 98
 
+interface CurrentSession {
+  timestamp: string
+  location: string
+  ip: string
+  device: string
+}
+
 const SecurityWidget: React.FC = () => {
-  const [lastLogin, setLastLogin] = useState<LoginHistory | null>(null)
+  const [session, setSession] = useState<CurrentSession | null>(null)
 
   useEffect(() => {
-    getLoginHistory()
-      .then((history) => {
-        if (history && history.length > 0) {
-          setLastLogin(history[0]) // Most recent login is first
-        }
+    // Capture current session data live — not from history
+    const timestamp = new Date().toISOString()
+    const device = parseUserAgent(navigator.userAgent)
+
+    getGeoDataFromIP().then((geo) => {
+      setSession({
+        timestamp,
+        location: geo.location,
+        ip: geo.ip,
+        device,
       })
-      .catch(() => {/* silently fail — widget just shows dashes */})
+    }).catch(() => {
+      setSession({
+        timestamp,
+        location: 'Unknown',
+        ip: 'Unknown',
+        device,
+      })
+    })
   }, [])
 
   const radius = 36
   const circumference = 2 * Math.PI * radius
   const strokeDash = (SECURITY_SCORE / 100) * circumference
 
-  const formatLastLogin = (iso: string): string => {
-    return new Intl.DateTimeFormat('en-IN', {
+  const formatTime = (iso: string): string =>
+    new Intl.DateTimeFormat('en-IN', {
       day: '2-digit',
       month: 'short',
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
     }).format(new Date(iso))
-  }
 
   return (
     <div className="bg-surface border border-border rounded-xl p-5 shadow-card">
@@ -56,23 +73,10 @@ const SecurityWidget: React.FC = () => {
       <div className="flex items-center gap-4 mb-4">
         <div className="relative flex-shrink-0">
           <svg width="88" height="88" viewBox="0 0 88 88" className="-rotate-90">
-            {/* Track */}
+            <circle cx="44" cy="44" r={radius} fill="none" stroke="#1A3A4E" strokeWidth="7" />
             <circle
-              cx="44"
-              cy="44"
-              r={radius}
-              fill="none"
-              stroke="#1A3A4E"
-              strokeWidth="7"
-            />
-            {/* Progress */}
-            <circle
-              cx="44"
-              cy="44"
-              r={radius}
-              fill="none"
-              stroke="#16A34A"
-              strokeWidth="7"
+              cx="44" cy="44" r={radius}
+              fill="none" stroke="#16A34A" strokeWidth="7"
               strokeLinecap="round"
               strokeDasharray={`${strokeDash} ${circumference}`}
               strokeDashoffset="0"
@@ -97,16 +101,16 @@ const SecurityWidget: React.FC = () => {
       {/* Divider */}
       <div className="border-t border-border mb-3" />
 
-      {/* Last Login */}
+      {/* Current Session */}
       <div className="space-y-2.5">
-        <p className="text-xs font-semibold text-muted uppercase tracking-widest">Last Login</p>
+        <p className="text-xs font-semibold text-muted uppercase tracking-widest">Current Session</p>
 
         {/* Timestamp */}
         <div className="flex items-start gap-2.5">
           <Clock size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-xs text-text font-medium">
-              {lastLogin ? formatLastLogin(lastLogin.timestamp) : '—'}
+              {session ? formatTime(session.timestamp) : '—'}
             </p>
             <p className="text-xs text-muted">Login time</p>
           </div>
@@ -117,9 +121,9 @@ const SecurityWidget: React.FC = () => {
           <MapPin size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-xs text-text font-medium">
-              {lastLogin?.location || '—'}
+              {session?.location ?? '—'}
             </p>
-            <p className="text-xs text-muted">Login location</p>
+            <p className="text-xs text-muted">Current location</p>
           </div>
         </div>
 
@@ -128,7 +132,7 @@ const SecurityWidget: React.FC = () => {
           <Monitor size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-xs text-text font-medium">
-              {lastLogin?.device || '—'}
+              {session?.device ?? '—'}
             </p>
             <p className="text-xs text-muted">Current device</p>
           </div>
@@ -139,7 +143,7 @@ const SecurityWidget: React.FC = () => {
           <Wifi size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-xs text-text font-medium">
-              {lastLogin?.ip || '—'}
+              {session?.ip ?? '—'}
             </p>
             <p className="text-xs text-muted">IP address</p>
           </div>
