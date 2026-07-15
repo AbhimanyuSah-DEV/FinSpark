@@ -60,14 +60,6 @@ const LandingPage: React.FC = () => (
               <Link to="/login?role=admin" className="btn-secondary text-base px-6 py-3">
                 <Lock size={16} /> Admin Security Center
               </Link>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {['₹10L+ Prize Pool', 'Winner Showcase · Global FinTech Fest 2026', 'Grand Finale · COEP Pune'].map(s => (
-                <div key={s} className="bg-surface/60 border border-border/50 rounded-lg px-3 py-2">
-                  <span className="text-xs text-muted">{s}</span>
-                </div>
-              ))}
-            </div>
           </div>
           <div className="flex justify-center lg:justify-end">
             <HeroIllustration />

@@ -155,24 +155,7 @@ const Hero: React.FC = () => (
         </div>
       </div>
 
-      {/* Stat cards */}
-      <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-14">
-        <StatCard
-          icon={<Trophy size={22} />}
-          value="&#x20B9;10L+"
-          label="Prize Pool"
-        />
-        <StatCard
-          icon={<Star size={22} />}
-          value="Winner"
-          label="Showcase"
-        />
-        <StatCard
-          icon={<ShieldCheck size={22} />}
-          value="Grand"
-          label="Finale"
-        />
-      </div>
+
     </div>
   </section>
 )
