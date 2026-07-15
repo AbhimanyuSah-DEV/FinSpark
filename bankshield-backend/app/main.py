@@ -20,11 +20,13 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",   # Vite dev server
-        "http://localhost:5174",   # Vite fallback port
-        "http://localhost:3000",   # CRA / Next fallback
+        "http://localhost:5173",          # Vite dev server
+        "http://localhost:5174",          # Vite fallback port
+        "http://localhost:3000",          # CRA / Next fallback
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
+        "https://fin-spark.vercel.app",   # Vercel production
+        "https://fin-spark-git-main-abhimanyusah-devs-projects.vercel.app",  # Vercel preview
     ],
     allow_credentials=True,
     allow_methods=["*"],
