@@ -60,6 +60,7 @@ const LandingPage: React.FC = () => (
               <Link to="/login?role=admin" className="btn-secondary text-base px-6 py-3">
                 <Lock size={16} /> Admin Security Center
               </Link>
+            </div>
           </div>
           <div className="flex justify-center lg:justify-end">
             <HeroIllustration />
