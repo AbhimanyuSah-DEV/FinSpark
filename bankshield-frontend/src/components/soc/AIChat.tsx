@@ -63,7 +63,15 @@ const AIChat: React.FC<AIChatProps> = ({ incidentId }) => {
 
   return (
     <>
-      {/* ── Floating button ─────────────────────────────────────── */}
+      {/* "Discuss this incident" label — shown when incident context is active */}
+      {!open && incidentId && (
+        <div className="fixed bottom-8 right-24 z-50 flex items-center gap-2 bg-surface border border-gold/30 rounded-full px-3 py-1.5 shadow-lg animate-in slide-in-from-right-4 fade-in duration-300">
+          <MessageSquare size={11} className="text-gold" />
+          <span className="text-xs font-semibold text-gold whitespace-nowrap">Discuss this incident</span>
+          <span className="w-2 h-2 rounded-full bg-danger animate-pulse" />
+        </div>
+      )}
+
       <button
         onClick={() => setOpen(o => !o)}
         className={`

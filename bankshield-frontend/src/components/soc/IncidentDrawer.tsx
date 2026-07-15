@@ -11,6 +11,10 @@ import {
   Ban,
   RotateCcw,
   CheckCircle2,
+  Snowflake,
+  Flag,
+  ArrowUpCircle,
+  MessageSquare,
 } from 'lucide-react'
 import type { Incident } from '../../types'
 import { getIncidentDetail, transactionAction } from '../../api/admin.api'
@@ -52,6 +56,9 @@ const IncidentDrawer: React.FC<IncidentDrawerProps> = ({ incidentId, onClose }) 
   const [actionModal, setActionModal] = useState<'REVERSE' | 'CANCEL' | null>(null)
   const [actionLoading, setActionLoading] = useState(false)
   const [actionResult, setActionResult] = useState<{ success: boolean; message: string } | null>(null)
+
+  // Account action state (UI-only confirmations for demo)
+  const [accountAction, setAccountAction] = useState<string | null>(null)
 
   useEffect(() => {
     if (!incidentId) {
@@ -258,7 +265,7 @@ const IncidentDrawer: React.FC<IncidentDrawerProps> = ({ incidentId, onClose }) 
                 </div>
               )}
 
-              {/* Admin Power Actions */}
+              {/* Admin Power Actions — Transaction */}
               {incident.transaction_id && !actionResult?.success && (
                 <div className="bg-surface-2 border border-danger/20 rounded-xl p-4">
                   <p className="text-xs font-bold text-danger uppercase tracking-wider mb-3 flex items-center gap-1.5">
@@ -285,6 +292,47 @@ const IncidentDrawer: React.FC<IncidentDrawerProps> = ({ incidentId, onClose }) 
                   </p>
                 </div>
               )}
+
+              {/* Admin Account Controls */}
+              <div className="bg-surface-2 border border-warning/20 rounded-xl p-4">
+                <p className="text-xs font-bold text-warning uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <ShieldAlert size={12} /> Admin Account Controls
+                </p>
+
+                {accountAction ? (
+                  <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl border bg-warning/10 border-warning/30 text-warning text-sm font-medium">
+                    <CheckCircle2 size={15} />
+                    {accountAction}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => setAccountAction(`Account for ${incident.affected_user} has been frozen. All transactions suspended pending review.`)}
+                      className="flex flex-col items-center gap-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-500/50 text-cyan-400 font-semibold text-xs py-3 px-2 rounded-xl transition-all duration-150"
+                    >
+                      <Snowflake size={15} />
+                      Freeze Account
+                    </button>
+                    <button
+                      onClick={() => setAccountAction(`Account for ${incident.affected_user} has been flagged for enhanced monitoring and compliance review.`)}
+                      className="flex flex-col items-center gap-1.5 bg-warning/10 hover:bg-warning/20 border border-warning/30 hover:border-warning/50 text-warning font-semibold text-xs py-3 px-2 rounded-xl transition-all duration-150"
+                    >
+                      <Flag size={15} />
+                      Flag Account
+                    </button>
+                    <button
+                      onClick={() => setAccountAction(`Incident ${incident.incident_id} has been escalated to the Senior SOC Analyst team for immediate review.`)}
+                      className="flex flex-col items-center gap-1.5 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 hover:border-purple-500/50 text-purple-400 font-semibold text-xs py-3 px-2 rounded-xl transition-all duration-150"
+                    >
+                      <ArrowUpCircle size={15} />
+                      Escalate
+                    </button>
+                  </div>
+                )}
+                <p className="text-[10px] text-muted mt-2.5 text-center">
+                  Freeze suspends all transactions · Flag triggers enhanced monitoring · Escalate notifies senior SOC
+                </p>
+              </div>
 
               <div className="grid grid-cols-2 gap-4">
                 {/* Fraud Probability */}
