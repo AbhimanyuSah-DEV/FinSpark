@@ -1,17 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Shield, Monitor, MapPin, CheckCircle2, ChevronRight, Clock } from 'lucide-react'
+import { Shield, Monitor, MapPin, CheckCircle2, ChevronRight, Clock, Wifi } from 'lucide-react'
+import { getLoginHistory } from '../../api/user.api'
+import type { LoginHistory } from '../../types'
 
 const SECURITY_SCORE = 98
 
-// Static but realistic last-login data
-const LAST_LOGIN = {
-  location: 'Mumbai, Maharashtra',
-  device: 'Chrome on Windows',
-  timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-}
-
 const SecurityWidget: React.FC = () => {
+  const [lastLogin, setLastLogin] = useState<LoginHistory | null>(null)
+
+  useEffect(() => {
+    getLoginHistory()
+      .then((history) => {
+        if (history && history.length > 0) {
+          setLastLogin(history[0]) // Most recent login is first
+        }
+      })
+      .catch(() => {/* silently fail — widget just shows dashes */})
+  }, [])
+
   const radius = 36
   const circumference = 2 * Math.PI * radius
   const strokeDash = (SECURITY_SCORE / 100) * circumference
@@ -94,27 +101,47 @@ const SecurityWidget: React.FC = () => {
       <div className="space-y-2.5">
         <p className="text-xs font-semibold text-muted uppercase tracking-widest">Last Login</p>
 
+        {/* Timestamp */}
         <div className="flex items-start gap-2.5">
           <Clock size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-xs text-text font-medium">{formatLastLogin(LAST_LOGIN.timestamp)}</p>
-            <p className="text-xs text-muted">Today's session</p>
+            <p className="text-xs text-text font-medium">
+              {lastLogin ? formatLastLogin(lastLogin.timestamp) : '—'}
+            </p>
+            <p className="text-xs text-muted">Login time</p>
           </div>
         </div>
 
+        {/* Location */}
         <div className="flex items-start gap-2.5">
           <MapPin size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-xs text-text font-medium">{LAST_LOGIN.location}</p>
+            <p className="text-xs text-text font-medium">
+              {lastLogin?.location || '—'}
+            </p>
             <p className="text-xs text-muted">Login location</p>
           </div>
         </div>
 
+        {/* Device */}
         <div className="flex items-start gap-2.5">
           <Monitor size={13} className="text-muted mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-xs text-text font-medium">{LAST_LOGIN.device}</p>
+            <p className="text-xs text-text font-medium">
+              {lastLogin?.device || '—'}
+            </p>
             <p className="text-xs text-muted">Current device</p>
+          </div>
+        </div>
+
+        {/* IP Address */}
+        <div className="flex items-start gap-2.5">
+          <Wifi size={13} className="text-muted mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-xs text-text font-medium">
+              {lastLogin?.ip || '—'}
+            </p>
+            <p className="text-xs text-muted">IP address</p>
           </div>
         </div>
       </div>
@@ -124,7 +151,7 @@ const SecurityWidget: React.FC = () => {
         <CheckCircle2 size={14} className="text-success flex-shrink-0" />
         <div>
           <p className="text-xs font-semibold text-text">Device Trusted</p>
-          <p className="text-xs text-muted">Recognised & verified</p>
+          <p className="text-xs text-muted">Recognised &amp; verified</p>
         </div>
       </div>
     </div>
