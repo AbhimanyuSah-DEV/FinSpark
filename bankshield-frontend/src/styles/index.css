@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #0B2535;
+    color: #FFFFFF;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0B2535; }
+  ::-webkit-scrollbar-thumb { background: #1E3A4A; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2A4A5E; }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface border border-border rounded-xl;
+  }
+  .btn-primary {
+    @apply bg-gold text-background font-semibold px-5 py-2.5 rounded-lg hover:bg-gold-dark transition-colors duration-200 inline-flex items-center gap-2;
+  }
+  .btn-secondary {
+    @apply border border-border text-text bg-transparent font-medium px-5 py-2.5 rounded-lg hover:bg-surface-2 transition-colors duration-200 inline-flex items-center gap-2;
+  }
+  .btn-ghost {
+    @apply text-muted hover:text-text hover:bg-surface-2 px-3 py-2 rounded-lg transition-colors duration-200 inline-flex items-center gap-2;
+  }
+  .input-field {
+    @apply w-full bg-surface-2 border border-border text-text placeholder-subtle rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-colors duration-200;
+  }
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest text-muted;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-text;
+  }
+}
