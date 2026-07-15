@@ -160,7 +160,12 @@ def transfer(
     timeline = build_timeline(transaction, login_history, risk_level, temp_incident_id)
 
     # ── [9] Quantum Risk Module ────────────────────────────────────────────────
-    quantum_result = assess_quantum_risk(login_history)
+    quantum_result = assess_quantum_risk(
+        login_history=login_history,
+        user=current_user,
+        transaction=transaction,
+        risk_level_value=risk_level.value,
+    )
 
     # ── [10] LLM Summary (MEDIUM, HIGH, CRITICAL) ──────────────────────────────
     if risk_level in (RiskLevel.MEDIUM, RiskLevel.HIGH, RiskLevel.CRITICAL):
