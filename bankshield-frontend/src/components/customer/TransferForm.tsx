@@ -138,14 +138,89 @@ const TransferForm: React.FC<TransferFormProps> = ({ onTransferComplete }) => {
           {/* If completed: show result */}
           {result && pipelineStage === 8 ? (
             <div className="space-y-4">
-              {/* Result summary card */}
-              <div className="bg-surface-2 border border-border rounded-xl p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-success" />
-                  <span className="text-sm font-semibold text-text">Transfer Complete</span>
+              {/* ── Animated tick / cross ── */}
+              <div className="flex flex-col items-center py-4">
+                {result.transaction?.status === 'BLOCKED' ? (
+                  /* Animated red cross for blocked */
+                  <svg viewBox="0 0 80 80" width="80" height="80">
+                    <circle
+                      cx="40" cy="40" r="36"
+                      fill="none"
+                      stroke="#DC2626"
+                      strokeWidth="4"
+                      strokeDasharray="226"
+                      strokeDashoffset="226"
+                      style={{
+                        animation: 'drawCircle 0.5s ease forwards',
+                      }}
+                    />
+                    <line
+                      x1="26" y1="26" x2="54" y2="54"
+                      stroke="#DC2626" strokeWidth="4" strokeLinecap="round"
+                      strokeDasharray="40"
+                      strokeDashoffset="40"
+                      style={{ animation: 'drawLine 0.3s ease 0.5s forwards' }}
+                    />
+                    <line
+                      x1="54" y1="26" x2="26" y2="54"
+                      stroke="#DC2626" strokeWidth="4" strokeLinecap="round"
+                      strokeDasharray="40"
+                      strokeDashoffset="40"
+                      style={{ animation: 'drawLine 0.3s ease 0.7s forwards' }}
+                    />
+                    <style>{`
+                      @keyframes drawCircle {
+                        to { stroke-dashoffset: 0; }
+                      }
+                      @keyframes drawLine {
+                        to { stroke-dashoffset: 0; }
+                      }
+                    `}</style>
+                  </svg>
+                ) : (
+                  /* Animated green tick for approved */
+                  <svg viewBox="0 0 80 80" width="80" height="80">
+                    <circle
+                      cx="40" cy="40" r="36"
+                      fill="none"
+                      stroke={result.risk_level === 'LOW' ? '#16A34A' : result.risk_level === 'MEDIUM' ? '#F59E0B' : '#F97316'}
+                      strokeWidth="4"
+                      strokeDasharray="226"
+                      strokeDashoffset="226"
+                      style={{ animation: 'drawCircle 0.5s ease forwards' }}
+                    />
+                    <polyline
+                      points="24,42 36,54 56,28"
+                      fill="none"
+                      stroke={result.risk_level === 'LOW' ? '#16A34A' : result.risk_level === 'MEDIUM' ? '#F59E0B' : '#F97316'}
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="50"
+                      strokeDashoffset="50"
+                      style={{ animation: 'drawLine 0.4s ease 0.5s forwards' }}
+                    />
+                    <style>{`
+                      @keyframes drawCircle {
+                        to { stroke-dashoffset: 0; }
+                      }
+                      @keyframes drawLine {
+                        to { stroke-dashoffset: 0; }
+                      }
+                    `}</style>
+                  </svg>
+                )}
+
+                <p className="text-sm font-bold text-text mt-3">
+                  {result.transaction?.status === 'BLOCKED' ? 'Transaction Blocked' : 'Transfer Complete'}
+                </p>
+                <div className="mt-1">
                   <RiskBadge level={result.risk_level} size="sm" />
                 </div>
+              </div>
 
+              {/* Result summary card */}
+              <div className="bg-surface-2 border border-border rounded-xl p-4 space-y-3">
                 {result.ai_summary && (
                   <div className="bg-background/40 border border-border rounded-lg p-3">
                     <div className="flex items-center gap-1.5 mb-1.5">
@@ -180,6 +255,7 @@ const TransferForm: React.FC<TransferFormProps> = ({ onTransferComplete }) => {
                 </button>
               </div>
             </div>
+
           ) : submitting ? (
             /* Simple loading state */
             <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
