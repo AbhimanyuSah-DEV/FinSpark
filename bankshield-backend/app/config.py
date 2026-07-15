@@ -15,6 +15,17 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
 
+    # CORS — comma-separated list of allowed origins
+    # e.g. "https://fin-spark.vercel.app,http://localhost:5173"
+    cors_origins: str = Field(
+        default="http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173",
+        env="CORS_ORIGINS",
+    )
+
+    @property
+    def allowed_origins(self) -> list[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
     # Fraud AI Model
     # Use "mock" to use the built-in mock client.
     # Set to a full URL when the Render model is deployed.
