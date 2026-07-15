@@ -177,21 +177,21 @@ const SecurityCenterPage: React.FC = () => {
                 </div>
               </section>
 
-              {/* 3. Live Transaction Table */}
-              <section id="live">
-                <LiveTransactionTable
-                  transactions={dashboard.recent_transactions}
-                  onRefresh={() => fetchAll(true)}
-                  isRefreshing={isRefreshing}
-                />
-              </section>
-
-              {/* 4. Incident Queue */}
+              {/* 3. Incident Queue */}
               <section id="incidents">
                 <IncidentQueue
                   incidents={dashboard.recent_incidents}
                   onSelect={handleIncidentSelect}
                   selectedId={selectedIncident?.incident_id}
+                />
+              </section>
+
+              {/* 4. Live Transaction Table */}
+              <section id="live">
+                <LiveTransactionTable
+                  transactions={dashboard.recent_transactions}
+                  onRefresh={() => fetchAll(true)}
+                  isRefreshing={isRefreshing}
                 />
               </section>
 
