@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Shield, Brain, Zap, Eye, ArrowRight, Activity, Lock, GitBranch, Cpu, ShieldAlert, Atom } from 'lucide-react'
+import { Shield, Brain, Zap, Eye, ArrowRight, Activity, Lock, GitBranch, Cpu, ShieldAlert, Atom, Info } from 'lucide-react'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 
@@ -45,7 +45,7 @@ const LandingPage: React.FC = () => (
           <div>
             <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-full px-3 py-1 mb-6">
               <Shield size={12} className="text-gold" />
-              <span className="text-gold text-xs font-medium">FinSpark'26 · Bank of Maharashtra</span>
+              <span className="text-gold text-xs font-medium">FinSpark'26 · Hackathon Prototype</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-black text-text uppercase leading-none tracking-tight mb-6">
               Banking<br />Protected by<br /><span className="text-gold">Intelligence</span>
@@ -164,6 +164,25 @@ const LandingPage: React.FC = () => (
               <span className="text-sm font-medium text-muted group-hover:text-text transition-colors text-center">{label}</span>
             </Link>
           ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Disclaimer */}
+    <section className="py-8 px-6 bg-background border-t border-border">
+      <div className="max-w-screen-xl mx-auto">
+        <div className="flex items-start gap-4 bg-gold/5 border border-gold/20 rounded-2xl px-6 py-5">
+          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <Info size={15} className="text-gold" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gold mb-1">Educational Hackathon Prototype</p>
+            <p className="text-sm text-muted leading-relaxed">
+              This application was developed for the Bank of Maharashtra FinSpark Hackathon.
+              It is <span className="text-text font-medium">not affiliated with, endorsed by, or operated by Bank of Maharashtra</span> and
+              does not collect or process real banking credentials.
+            </p>
+          </div>
         </div>
       </div>
     </section>

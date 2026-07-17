@@ -1,5 +1,5 @@
 import React from 'react'
-import { Shield } from 'lucide-react'
+import { Shield, Info } from 'lucide-react'
 
 const Footer: React.FC = () => (
   <footer className="bg-surface border-t border-border mt-auto">
@@ -12,16 +12,16 @@ const Footer: React.FC = () => (
             <span className="font-bold text-text">BankShield <span className="text-gold">AI</span></span>
           </div>
           <p className="text-muted text-sm leading-relaxed max-w-xs">
-            AI-powered cyber threat intelligence for Bank of Maharashtra.
-            Correlating cybersecurity telemetry with transactional behaviour.
+            AI-powered cyber-financial threat intelligence platform.
+            Correlating cybersecurity telemetry with transactional behaviour in real time.
           </p>
-          <p className="text-subtle text-xs mt-4">Presented by Bank of Maharashtra · FinSpark'26</p>
+          <p className="text-subtle text-xs mt-4">FinSpark'26 · Hackathon Prototype</p>
         </div>
 
         {/* Links */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">Services</p>
-          {['Personal Banking', 'Business Banking', 'Loans', 'Cards', 'NRI Services'].map(l => (
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted mb-3">Platform</p>
+          {['Customer Dashboard', 'Security Center', 'Threat Intelligence', 'Incident Queue', 'Quantum Monitor'].map(l => (
             <a key={l} href="#" className="block text-sm text-subtle hover:text-muted transition-colors mb-1.5">{l}</a>
           ))}
         </div>
@@ -33,8 +33,21 @@ const Footer: React.FC = () => (
         </div>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-xs text-subtle">© 2026 Bank of Maharashtra. All rights reserved.</p>
+      {/* Disclaimer */}
+      <div className="mt-8 bg-gold/5 border border-gold/15 rounded-xl px-5 py-4 flex items-start gap-3">
+        <Info size={14} className="text-gold flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-xs font-semibold text-gold mb-1">Educational Hackathon Prototype</p>
+          <p className="text-xs text-muted leading-relaxed">
+            This application was developed for the Bank of Maharashtra FinSpark Hackathon.
+            It is not affiliated with, endorsed by, or operated by Bank of Maharashtra and
+            does not collect or process real banking credentials.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-xs text-subtle">© 2026 BankShield AI. All rights reserved.</p>
         <p className="text-xs text-subtle">BankShield AI — "Banking Protected by Intelligence"</p>
       </div>
     </div>

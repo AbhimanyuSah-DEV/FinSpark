@@ -61,7 +61,7 @@ const NotFoundPage: React.FC = () => (
         <span className="text-white font-bold">Bank</span>
         <span className="text-gold font-bold">Shield</span>
         <span className="text-muted font-medium"> AI</span>
-        {' '}— Powered by Bank of Maharashtra
+        {' '}— Banking Protected by Intelligence
       </p>
     </div>
   </div>

@@ -68,8 +68,8 @@ const SOCSidebar: React.FC = () => {
 
       {/* Footer */}
       <div className="px-5 py-4 border-t border-border">
-        <p className="text-xs text-muted/50">Bank of Maharashtra</p>
-        <p className="text-xs text-muted/50">BankShield AI v1.0</p>
+        <p className="text-xs text-muted/50">BankShield AI</p>
+        <p className="text-xs text-muted/50">SOC Platform v1.0</p>
       </div>
     </aside>
   )
