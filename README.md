@@ -12,9 +12,36 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech/)
 [![Gemini AI](https://img.shields.io/badge/Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 
-**[🌐 Live Demo](https://fin-spark.vercel.app) · [🔧 API Docs](https://finspark-gzwm.onrender.com/docs)**
+**[🌐 Live Demo](https://bankshield-ai.vercel.app) · [🔧 API Docs](https://finspark-gzwm.onrender.com/docs)**
 
 </div>
+
+---
+
+> [!IMPORTANT]
+> **Note:** This prototype is developed solely for demonstration purposes as part of the hackathon.
+> For the best evaluation experience, we recommend accessing the application using **Microsoft Edge** or **Mozilla Firefox**, as some versions of Google Chrome may display a browser security warning for banking-themed prototype websites.
+
+---
+
+## 🔑 Demo Credentials
+
+### 👤 Customer Login
+| Field | Value |
+|---|---|
+| **URL** | https://bankshield-ai.vercel.app/login?role=user |
+| **Username** | `rahul_sharma` |
+| **Password** | `demo123` |
+
+### 🛡️ Admin / SOC Login
+| Field | Value |
+|---|---|
+| **URL** | https://bankshield-ai.vercel.app/login?role=admin |
+| **Username** | `admin` |
+| **Password** | `admin123` |
+
+> [!TIP]
+> **Signature Demo Flow:** Login as `rahul_sharma` → Transfer **₹8,00,000** to account `ACC-20250002` → Watch the BrainCore AI pipeline flag it as **CRITICAL** → Switch to Admin SOC and investigate the incident in the Incident Queue.
 
 ---
 
@@ -26,8 +53,7 @@
 - [The BrainCore Intelligence Pipeline](#-the-braincore-intelligence-pipeline)
 - [Features](#-features)
 - [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Demo Credentials](#-demo-credentials)
+- [Getting Started (Local)](#-getting-started-local)
 - [API Reference](#-api-reference)
 - [Environment Variables](#-environment-variables)
 - [Deployment](#-deployment)
@@ -52,7 +78,7 @@ BankShield AI takes a **predictive approach** by:
 ┌─────────────────────────────────────────────────────────────────┐
 │                        FRONTEND (React + Vite)                  │
 │  Landing Page → Customer Dashboard → SOC Admin Dashboard        │
-│  Vercel: https://fin-spark.vercel.app                          │
+│  Vercel: https://bankshield-ai.vercel.app                       │
 └─────────────────────────┬───────────────────────────────────────┘
                           │  REST API (Axios + JWT)
 ┌─────────────────────────▼───────────────────────────────────────┐
@@ -77,7 +103,7 @@ BankShield AI takes a **predictive approach** by:
 | Layer | Technology |
 |---|---|
 | **Frontend** | React 18, TypeScript, Vite, TailwindCSS v3, React Router DOM, Axios, Lucide React |
-| **Backend** | Python 3.13, FastAPI 0.115, SQLAlchemy 2.0, Alembic |
+| **Backend** | Python 3.13, FastAPI 0.115, SQLAlchemy 2.0 |
 | **Database** | PostgreSQL via Neon (cloud-hosted, serverless) |
 | **AI / LLM** | Google Gemini Flash (via `google-generativeai`) |
 | **Auth** | JWT (`python-jose`) + bcrypt password hashing |
@@ -129,22 +155,24 @@ Every `POST /user/transfer` triggers an **8-stage real-time analysis pipeline**:
 - **Real-time Balance** that updates after every transaction
 - **Transfer Money** with mandatory security password verification
 - **Transaction History** with colour-coded risk badges (LOW → CRITICAL)
-- **Security Page** — Login history with IP tracking, trusted devices, security score
+- **Security Widget** — Current session IP, location, device name, and login time
+- **Security Page** — Login history, trusted devices, security score
 
 ### 🔐 SOC Admin Dashboard (Defender-style)
 - **Live KPI Cards** — Total transactions, active incidents, fraud rate, critical alerts
 - **Incident Queue** — Filterable by severity (CRITICAL/HIGH/MEDIUM/LOW)
 - **AI Investigator** — Gemini-written investigation reports per incident
 - **Incident Drawer** — 5-tab deep dive: Timeline · Behaviour · Correlation · Fraud Analysis · Quantum Risk
+- **Account Controls** — Freeze Account, Flag for Review, Escalate, Cancel/Reverse Transaction
 - **Live Transaction Monitor** — 30-second auto-refresh feed with IP & location data
 - **Quantum Intelligence Widget** — HNDL exposure score and quantum threat indicators
-- **SOC AI Chat** — Ask questions about active incidents using Gemini AI
+- **SOC AI Chat** — Ask questions about active incidents using Gemini AI ("Discuss this incident")
 
 ### 🧠 Intelligence Features
 - **Behaviour Profiling** — per-user baseline for unusual time, device, location, and amount detection
 - **IP & Geolocation Capture** — every transaction records the user's public IP and location
 - **Login History Tracking** — browser, device, IP, location, and status per login
-- **Quantum Risk Module** — simulated HNDL (Harvest Now, Decrypt Later) risk assessment
+- **Quantum Risk Module** — deterministic HNDL (Harvest Now, Decrypt Later) risk assessment based on transaction value, account balance, device diversity, external routing, and account age
 
 ---
 
@@ -198,18 +226,18 @@ FinSpark/
     │   ├── pages/               # Route-level page components
     │   ├── context/             # AuthContext (JWT + user state)
     │   ├── types/               # TypeScript interfaces
-    │   └── utils/               # formatters, constants, geolocation
+    │   └── utils/               # formatters, geolocation, parseUserAgent
     └── vercel.json              # SPA routing config for Vercel
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started (Local)
 
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
-- A PostgreSQL database (or use the included Neon connection)
+- A PostgreSQL database (local or Neon cloud)
 
 ### 1. Clone the repository
 ```bash
@@ -229,11 +257,13 @@ python -m venv venv
 # Install dependencies
 pip install -r requirements.txt
 
-# Create .env file
-cp .env.example .env
-# Edit .env with your values (see Environment Variables section)
+# Create .env file and fill in your values
+# (see Environment Variables section below)
 
-# Start the server
+# Seed the database with demo data
+python -m app.utils.seed
+
+# Start the backend server
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -244,43 +274,23 @@ cd bankshield-frontend
 # Install dependencies
 npm install
 
-# Create .env file
+# Point the frontend at your local backend
 echo "VITE_API_BASE_URL=http://localhost:8000" > .env
 
-# Start dev server
+# Start the dev server
 npm run dev
 ```
 
 ### 4. Open the app
+
 | Service | URL |
 |---|---|
 | Frontend | http://localhost:5173 |
 | Backend API | http://localhost:8000 |
 | Swagger Docs | http://localhost:8000/docs |
 
----
-
-## 🔑 Demo Credentials
-
-| Role | Username | Password |
-|---|---|---|
-| Customer | `rahul_sharma` | `demo123` |
-| Customer | `priya_patel` | `demo123` |
-| Customer | `amit_verma` | `demo123` |
-| Admin SOC | `admin` | `admin123` |
-
-### 🎬 Signature Demo Flow
-
-1. Visit the **Landing Page** to understand the AI pipeline
-2. Login as **`rahul_sharma` / `demo123`**
-3. Click **Transfer Money** → send **₹8,00,000** to account `ACC-20250002`
-4. Enter password `demo123` to authorise the transfer
-5. Watch the **BrainCore Pipeline** process the transaction
-6. See the **CRITICAL** risk badge + **Gemini AI-written** investigation summary
-7. Switch to **Admin SOC** → login as `admin / admin123`
-8. Find the new incident in the **Incident Queue**
-9. Click the incident → **Drawer** slides in with 5 deep-dive tabs
-10. Check the **Quantum Widget** for HNDL exposure score
+> [!NOTE]
+> `GEMINI_API_KEY` is optional. If left empty, the system automatically falls back to a realistic mock LLM response so the demo never breaks.
 
 ---
 
@@ -311,6 +321,7 @@ npm run dev
 | `GET` | `/admin/quantum` | Quantum risk overview |
 | `GET` | `/admin/users` | All registered users |
 | `POST` | `/admin/chat` | SOC AI Chat (Gemini-powered) |
+| `POST` | `/admin/transactions/{id}/action` | Cancel or reverse a transaction |
 
 ---
 
@@ -324,6 +335,7 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 FRAUD_MODEL_URL=mock
 GEMINI_API_KEY=your-gemini-api-key
+CORS_ORIGINS=http://localhost:5173,https://bankshield-ai.vercel.app
 ENVIRONMENT=development
 ```
 
@@ -331,8 +343,6 @@ ENVIRONMENT=development
 ```env
 VITE_API_BASE_URL=http://localhost:8000
 ```
-
-> **Note:** `GEMINI_API_KEY` is optional. If left empty, the system automatically falls back to a realistic mock LLM service so the demo never breaks.
 
 ---
 
@@ -343,12 +353,16 @@ VITE_API_BASE_URL=http://localhost:8000
 - **Build Command:** `pip install -r requirements.txt`
 - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 - Add all environment variables in the Render dashboard
+- Set `CORS_ORIGINS` to your Vercel frontend URL (no trailing slash)
 
 ### Frontend → Vercel
 - **Root Directory:** `bankshield-frontend`
 - **Framework:** Vite (auto-detected)
-- **Environment Variable:** `VITE_API_BASE_URL=https://your-render-url.onrender.com`
+- **Environment Variable:** `VITE_API_BASE_URL=https://finspark-gzwm.onrender.com`
 - The included `vercel.json` handles SPA client-side routing automatically
+
+> [!WARNING]
+> The backend runs on Render's **free tier** which spins down after 15 minutes of inactivity. On first visit, allow **30–60 seconds** for the backend to wake up, then try logging in again.
 
 ---
 
@@ -365,5 +379,7 @@ VITE_API_BASE_URL=http://localhost:8000
 <div align="center">
 
 Built with ❤️ for **FinSpark'26 · Bank of Maharashtra Hackathon**
+
+*Educational prototype — not affiliated with or endorsed by Bank of Maharashtra*
 
 </div>
